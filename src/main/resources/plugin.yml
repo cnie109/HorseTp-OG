@@ -1,4 +1,4 @@
 name: HorseTp
-version: '${version}'
+version: '1.0'
 main: me.barny1094875.horsetp.HorseTp
 api-version: 1.18
