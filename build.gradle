@@ -1,0 +1,79 @@
+plugins {
+
+    id "java" // Tell gradle this is a java project.
+    id "com.github.johnrengelman.shadow" version "7.1.2" // Import utility to package libraries into .jar file.
+
+}
+
+group = "me.Barny1094875"
+version = "1.0"
+
+def apiVersion = "1.18.2" // Declare minecraft server target version.
+def targetJavaVersion = 17 // Declare java compatibility minimum.
+
+apply plugin: "eclipse" // Enable integration with Eclipse IDE for development.
+
+processResources {
+
+    def props = [
+            version: version,
+            apiVersion: apiVersion,
+    ]
+
+    inputs.properties props // Indicates to rerun if version changes.
+
+    filesMatching("plugin.yml") {
+
+        expand props
+
+    }
+
+}
+
+repositories {
+
+    mavenCentral()
+
+    maven {
+
+        url "https://repo.purpurmc.org/snapshots" // Get purpur API from purpur maven repository.
+
+    }
+
+}
+
+dependencies {
+
+    implementation 'org.projectlombok:lombok:1.18.22'
+    compileOnly "org.purpurmc.purpur:purpur-api:1.18.2-R0.1-SNAPSHOT" // Declare purpur API version to be packaged.
+    implementation 'com.google.code.gson:gson:2.10.1'
+
+}
+
+shadowJar {
+
+    minimize()
+
+}
+
+jar.dependsOn shadowJar
+
+tasks.jar.configure {
+
+    classifier = "part"
+
+}
+
+tasks.shadowJar.configure {
+
+    classifier = null
+
+}
+
+compileJava {
+
+    options.compilerArgs += ["-parameters"]
+    options.fork = true
+    options.forkOptions.executable = 'javac'
+
+}
