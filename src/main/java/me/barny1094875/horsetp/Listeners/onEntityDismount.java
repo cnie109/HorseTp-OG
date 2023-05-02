@@ -60,18 +60,19 @@ public class onEntityDismount implements Listener {
 //                        });
 //                    }, 1);
 
-                    // add a cat to the vehicle for 1 tick so that they client can see that
+                    // add a llama spit to the vehicle for 1 tick so that they client can see that
                     // the vehicle
-                    // there's no particular reason for it being a cat, I just wanted it to be
-                    // spawn the cat at playerX, 10000, playerZ
+                    // a llama spit is used since it is tiny
+                    // it also causes a little effect on the vehicle
+                    // spawn the spit at playerX, 10000, playerZ
                     Location catLocation = player.getLocation();
                     catLocation.setY(10000);
-                    Cat cat = (Cat) playerWorld.spawnEntity(player.getLocation(), EntityType.CAT);
+                    Entity spit = playerWorld.spawnEntity(player.getLocation(), EntityType.LLAMA_SPIT);
                     // add the cat to the vehicle
-                    vehicle.addPassenger(cat);
+                    vehicle.addPassenger(spit);
                     // wait 1 tick and then kill the cat
                     Bukkit.getScheduler().runTaskLater(HorseTp.getPlugin(), () -> {
-                        cat.remove();
+                        spit.remove();
                     }, 1);
                 }, 1);
             }, 1);
