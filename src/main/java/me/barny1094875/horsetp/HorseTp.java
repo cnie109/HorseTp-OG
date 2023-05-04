@@ -5,19 +5,19 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class HorseTp extends JavaPlugin {
 
-    private static HorseTp plugin;
+	private static HorseTp plugin;
 
-    @Override
-    public void onEnable() {
-        plugin = this;
-        // Plugin startup logic
+	@Override
+	public void onEnable() {
+		plugin = this;
+		// Plugin startup logic
 
-        getServer().getPluginManager().registerEvents(new onEntityDismount(), this);
+		getServer().getPluginManager().registerEvents(new onEntityDismount(), this);
 
-    }
+	}
 
-    public static HorseTp getPlugin(){
-        return plugin;
-    }
+	public static HorseTp getPlugin(){
+		return plugin;
+	}
 
 }
