@@ -1,6 +1,6 @@
 package me.barny1094875.horsetp;
 
-import me.barny1094875.horsetp.Listeners.onEntityDismount;
+import me.barny1094875.horsetp.Listeners.OnEntityDismount;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class HorseTp extends JavaPlugin {
@@ -12,7 +12,7 @@ public final class HorseTp extends JavaPlugin {
         plugin = this;
         // Plugin startup logic
 
-        getServer().getPluginManager().registerEvents(new onEntityDismount(), this);
+        getServer().getPluginManager().registerEvents(new OnEntityDismount(), this);
 
     }
 

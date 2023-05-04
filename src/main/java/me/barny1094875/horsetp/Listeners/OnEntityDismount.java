@@ -1,11 +1,11 @@
 package me.barny1094875.horsetp.Listeners;
 
-import me.barny1094875.horsetp.HorseTp;
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.entity.Cat;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -13,9 +13,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.spigotmc.event.entity.EntityDismountEvent;
 
-import java.util.List;
+import me.barny1094875.horsetp.HorseTp;
 
-public class onEntityDismount implements Listener {
+public class OnEntityDismount implements Listener {
 
     @EventHandler
     // when a player teleports, they are dismounted from their vehicle
