@@ -35,9 +35,10 @@ repositories {
     mavenCentral()
 
     maven {
-
         url "https://repo.purpurmc.org/snapshots" // Get purpur API from purpur maven repository.
-
+    }
+    maven{
+        url "https://maven.enginehub.org/repo/" // the WorldGuard api
     }
 
 }
@@ -46,6 +47,7 @@ dependencies {
 
     implementation 'org.projectlombok:lombok:1.18.22'
     compileOnly "org.purpurmc.purpur:purpur-api:1.18.2-R0.1-SNAPSHOT" // Declare purpur API version to be packaged.
+    compileOnly 'com.sk89q.worldguard:worldguard-bukkit:7.0.7'
     implementation 'com.google.code.gson:gson:2.10.1'
 
 }
