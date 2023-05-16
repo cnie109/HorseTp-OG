@@ -35,6 +35,7 @@ public class OnPlayerTeleport implements Listener {
 
         // run all of this 1 tick after the teleport so that the players location gets updated
         Bukkit.getScheduler().runTaskLater(HorseTp.getPlugin(), () -> {
+            // this checks to see if the teleport was a result of a dismount, or a /tp
             if (!event.getCause().equals(TeleportCause.UNKNOWN)) {
                 Player player = event.getPlayer();
                 // get the vehicle from the vehicle cache
@@ -58,7 +59,7 @@ public class OnPlayerTeleport implements Listener {
                     if(vehicle instanceof Boat || vehicle instanceof Minecart) {
                         player.sendMessage(Component.text("[HorseTp]")
                                 .color(TextColor.color(0, 255, 0))
-                                .append(Component.text(" you can't teleport there")
+                                .append(Component.text(" You can't teleport there")
                                         .color(TextColor.color(255, 0, 0))));
                         event.setCancelled(true);
                         // teleport the player back to the original location
@@ -103,9 +104,11 @@ public class OnPlayerTeleport implements Listener {
                         Location spitLocation = player.getLocation();
                         spitLocation.setY(10000);
                         Entity spit = playerWorld.spawnEntity(player.getLocation(), EntityType.LLAMA_SPIT);
-                        // add the cat to the vehicle
-                        vehicle.addPassenger(spit);
-                        // wait 1 tick and then kill the cat
+                        // add the spit to the vehicle
+                        try { // just in case another plugin got rid of the vehicle to prevent an exception
+                            vehicle.addPassenger(spit);
+                        } catch(Exception e){};
+                        // wait 1 tick and then kill the spit
                         Bukkit.getScheduler().runTaskLater(HorseTp.getPlugin(), () -> {
                             spit.remove();
                         }, 1);
