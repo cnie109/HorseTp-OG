@@ -69,7 +69,11 @@ public class OnPlayerTeleport implements Listener {
                 }
                 World playerWorld = player.getWorld();
                 // get a list of all the passengers the vehicle had
-                List<Entity> passengerList = vehicle.getPassengers();
+                // use try-catch to see if the vehicle still exists
+                List<Entity> passengerList = null;
+                try {
+                    passengerList = vehicle.getPassengers();
+                } catch(Exception e){return;}
                 // remove the player from the passenger list
                 passengerList.remove(player);
                 // eject all of the passengers
@@ -81,10 +85,14 @@ public class OnPlayerTeleport implements Listener {
                 vehicleWorld.loadChunk(vehicleChunk);
 
                 // wait 1 tick before teleporting the entity
+                List<Entity> finalPassengerList = passengerList; // apparently this is required for the compiler to be happy ?
                 Bukkit.getScheduler().runTaskLater(HorseTp.getPlugin(), () -> {
                     // teleport the vehicle and all of the passengers
-                    vehicle.teleport(player.getLocation());
-                    passengerList.forEach(entity -> {
+                    // use try-catch to see if the vehicle still exists
+                    try {
+                        vehicle.teleport(player.getLocation());
+                    } catch(Exception e){return;}
+                    finalPassengerList.forEach(entity -> {
                         entity.teleport(player.getLocation());
                         vehicle.addPassenger(entity);
                     });
@@ -105,9 +113,10 @@ public class OnPlayerTeleport implements Listener {
                         spitLocation.setY(10000);
                         Entity spit = playerWorld.spawnEntity(player.getLocation(), EntityType.LLAMA_SPIT);
                         // add the spit to the vehicle
-                        try { // just in case another plugin got rid of the vehicle to prevent an exception
+                        // use try-catch to see if the vehicle still exists
+                        try {
                             vehicle.addPassenger(spit);
-                        } catch(Exception e){};
+                        } catch(Exception ignored){}
                         // wait 1 tick and then kill the spit
                         Bukkit.getScheduler().runTaskLater(HorseTp.getPlugin(), () -> {
                             spit.remove();
