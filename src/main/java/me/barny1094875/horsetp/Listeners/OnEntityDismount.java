@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.spigotmc.event.entity.EntityDismountEvent;
 
@@ -11,7 +12,7 @@ import me.barny1094875.horsetp.HorseTp;
 
 public class OnEntityDismount implements Listener {
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     // when a player teleports, they are dismounted from their vehicle
     // so when they get dismounted, teleport the vehicle to them
     public void onEntityDismount(EntityDismountEvent event){
