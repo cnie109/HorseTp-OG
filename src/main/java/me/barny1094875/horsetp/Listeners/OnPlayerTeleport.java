@@ -46,7 +46,7 @@ public class OnPlayerTeleport implements Listener {
                 // get the vehicle from the vehicle cache
                 Entity vehicle = HorseTp.getVehicleCahce().get(player);
                 // remove the player and vehicle from the cache
-                HorseTp.getVehicleCahce().remove(player);
+//                HorseTp.getVehicleCahce().remove(player);
 
                 // check if the area that the player teleported to is a banned area
                 LocalPlayer localPlayer = WorldGuardPlugin.inst().wrapPlayer(player);
