@@ -26,17 +26,18 @@ public class OnPlayerTeleport implements Listener {
     @EventHandler
     public void onPlayerTeleport(PlayerTeleportEvent event) {
         HorseTp.getPlugin().getLogger().info("Teleport");
-
-        // if the player did not have a vehicle prior to the teleport
-        // ignore this handler
-        if(HorseTp.getVehicleCahce().get(event.getPlayer()) == null){
-            HorseTp.getPlugin().getLogger().info("No Vehicle");
-            return;
-        }
-
-
         // run all of this 1 tick after the teleport so that the players location gets updated
+        // and the dismount event is guaranteed to have been called
         Bukkit.getScheduler().runTaskLater(HorseTp.getPlugin(), () -> {
+
+            // if the player did not have a vehicle prior to the teleport
+            // ignore this handler
+            if(HorseTp.getVehicleCahce().get(event.getPlayer()) == null){
+                HorseTp.getPlugin().getLogger().info("No Vehicle");
+                return;
+            }
+
+
             HorseTp.getPlugin().getLogger().info("Starting");
             // this checks to see if the teleport was a result of a dismount, or a /tp
             if (!event.getCause().equals(TeleportCause.UNKNOWN)) {

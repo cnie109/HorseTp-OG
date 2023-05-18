@@ -27,11 +27,11 @@ public class OnEntityDismount implements Listener {
             Entity vehicle = event.getDismounted();
             HorseTp.getVehicleCahce().put(player, vehicle);
 
-            // 3 ticks later, remove them from the cache
+            // 5 ticks later, remove them from the cache
             Bukkit.getScheduler().runTaskLater(HorseTp.getPlugin(), () -> {
                 HorseTp.getPlugin().getLogger().info("Vehicle Removed");
                 HorseTp.getVehicleCahce().remove(player);
-            }, 3);
+            }, 5);
         }
     }
 
