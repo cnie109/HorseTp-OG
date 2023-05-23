@@ -16,9 +16,7 @@ public class OnEntityDismount implements Listener {
     // when a player teleports, they are dismounted from their vehicle
     // so when they get dismounted, teleport the vehicle to them
     public void onEntityDismount(EntityDismountEvent event){
-        HorseTp.getPlugin().getLogger().info("Dismounted");
         if(event.getEntity() instanceof Player){
-            HorseTp.getPlugin().getLogger().info("Player");
 
             // When a player dismounts, add them and the vehicle
             // to a cache, which is read on a teleport event to tp them
@@ -29,7 +27,6 @@ public class OnEntityDismount implements Listener {
 
             // 5 ticks later, remove them from the cache
             Bukkit.getScheduler().runTaskLater(HorseTp.getPlugin(), () -> {
-                HorseTp.getPlugin().getLogger().info("Vehicle Removed");
                 HorseTp.getVehicleCahce().remove(player);
             }, 5);
         }
