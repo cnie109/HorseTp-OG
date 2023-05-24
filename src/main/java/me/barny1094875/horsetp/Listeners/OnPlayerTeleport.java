@@ -37,6 +37,7 @@ public class OnPlayerTeleport implements Listener {
 
 
             // this checks to see if the teleport was a result of a dismount, or a /tp
+            // TeleportCause.UNKNOWN is a dismount
             if (!event.getCause().equals(TeleportCause.UNKNOWN)) {
                 Player player = event.getPlayer();
                 // get the vehicle from the vehicle cache
@@ -56,7 +57,7 @@ public class OnPlayerTeleport implements Listener {
 
                 // check if the horse-can-tp flag is set to DENY
                 if (!set.testState(localPlayer, HorseTp.getHorseTpFlag())) {
-                    // only stop the tp if the player is in a minecart of boat
+                    // only stop the tp if the player is in a minecart or boat
                     // Otherwise, a protected area could be flooded with boats and minecarts
                     // that can't be destroyed by non-admins
                     if(vehicle instanceof Boat || vehicle instanceof Minecart) {
@@ -102,29 +103,35 @@ public class OnPlayerTeleport implements Listener {
                     });
 
                     // unload the chunk that the vehicle was in one tick later
-                    // also kick the player from the vehicle
+                    // also add the player back to the vehicle
                     Bukkit.getScheduler().runTaskLater(HorseTp.getPlugin(), () -> {
                         vehicleWorld.unloadChunk(vehicleChunk);
-                        // eject and re-add all of the passengers so that the client
-                        // realizes that the vehicle is there
-
-                        // add a llama spit to the vehicle for 1 tick so that they client can see that
-                        // the vehicle
-                        // a llama spit is used since it is tiny
-                        // it also causes a little effect on the vehicle
-                        // spawn the spit at playerX, 10000, playerZ
-                        Location spitLocation = player.getLocation();
-                        spitLocation.setY(10000);
-                        Entity spit = playerWorld.spawnEntity(player.getLocation(), EntityType.LLAMA_SPIT);
-                        // add the spit to the vehicle
-                        // use try-catch to see if the vehicle still exists
-                        try {
-                            vehicle.addPassenger(spit);
-                        } catch(Exception ignored){}
-                        // wait 1 tick and then kill the spit
+                        // I've found that 4 ticks is the amount of time needed
+                        // so that the teleport is consistently done for this
                         Bukkit.getScheduler().runTaskLater(HorseTp.getPlugin(), () -> {
-                            spit.remove();
-                        }, 1);
+                            vehicle.addPassenger(player);
+                        }, 4);
+//                        // eject and re-add all of the passengers so that the client
+//                        // realizes that the vehicle is there
+//
+//                        // add a llama spit to the vehicle for 1 tick so that they client can see that
+//                        // the vehicle
+//                        // a llama spit is used since it is tiny
+//                        // it also causes a little effect on the vehicle
+//                        // spawn the spit at playerX, 10000, playerZ
+//                        Location spitLocation = player.getLocation();
+//                        spitLocation.setY(10000);
+//                        Entity spit = playerWorld.spawnEntity(player.getLocation(), EntityType.LLAMA_SPIT);
+//                        // add the spit to the vehicle
+//                        // use try-catch to see if the vehicle still exists
+//                        try {
+//                            vehicle.addPassenger(spit);
+//                        } catch(Exception ignored){}
+                        // wait 1 tick and then kill the spit
+                        // and put the player back into the vehicle
+//                        Bukkit.getScheduler().runTaskLater(HorseTp.getPlugin(), () -> {
+//                            spit.remove();
+//                        }, 1);
                     }, 1);
                 }, 1);
             }
