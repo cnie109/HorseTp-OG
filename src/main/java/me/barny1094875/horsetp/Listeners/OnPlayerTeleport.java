@@ -97,41 +97,24 @@ public class OnPlayerTeleport implements Listener {
                     try {
                         vehicle.teleport(player.getLocation());
                     } catch(Exception e){return;}
+
                     finalPassengerList.forEach(entity -> {
                         entity.teleport(player.getLocation());
                         vehicle.addPassenger(entity);
                     });
 
+                    // simply hide and show the vehicle
+                    // so that the vehicle is not invisible
+                    player.hideEntity(HorseTp.getPlugin(), vehicle);
+                    player.showEntity(HorseTp.getPlugin(), vehicle);
+
+                    // add the player back to the vehicle
+                    vehicle.addPassenger(player);
+
                     // unload the chunk that the vehicle was in one tick later
                     // also add the player back to the vehicle
                     Bukkit.getScheduler().runTaskLater(HorseTp.getPlugin(), () -> {
                         vehicleWorld.unloadChunk(vehicleChunk);
-                        // I've found that 4 ticks is the amount of time needed
-                        // so that the teleport is consistently done for this
-                        Bukkit.getScheduler().runTaskLater(HorseTp.getPlugin(), () -> {
-                            vehicle.addPassenger(player);
-                        }, 4);
-//                        // eject and re-add all of the passengers so that the client
-//                        // realizes that the vehicle is there
-//
-//                        // add a llama spit to the vehicle for 1 tick so that they client can see that
-//                        // the vehicle
-//                        // a llama spit is used since it is tiny
-//                        // it also causes a little effect on the vehicle
-//                        // spawn the spit at playerX, 10000, playerZ
-//                        Location spitLocation = player.getLocation();
-//                        spitLocation.setY(10000);
-//                        Entity spit = playerWorld.spawnEntity(player.getLocation(), EntityType.LLAMA_SPIT);
-//                        // add the spit to the vehicle
-//                        // use try-catch to see if the vehicle still exists
-//                        try {
-//                            vehicle.addPassenger(spit);
-//                        } catch(Exception ignored){}
-                        // wait 1 tick and then kill the spit
-                        // and put the player back into the vehicle
-//                        Bukkit.getScheduler().runTaskLater(HorseTp.getPlugin(), () -> {
-//                            spit.remove();
-//                        }, 1);
                     }, 1);
                 }, 1);
             }
