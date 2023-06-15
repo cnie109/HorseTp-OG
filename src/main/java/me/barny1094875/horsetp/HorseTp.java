@@ -32,7 +32,7 @@ public final class HorseTp extends JavaPlugin {
         } catch (FlagConflictException e) {
             // some other plugin registered a flag by the same name already.
             // you can use the existing flag, but this may cause conflicts - be sure to check type
-            Flag<?> existing = registry.get("horse-can-tp");
+            Flag<?> existing = registry.get("tp-animals-only");
             if (existing instanceof StateFlag) {
                 HorseTpFlag = (StateFlag) existing;
             } else {

@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "me.Barny1094875"
-version = "1.0"
+version = "1.3"
 
 def apiVersion = "1.18.2" // Declare minecraft server target version.
 def targetJavaVersion = 17 // Declare java compatibility minimum.
