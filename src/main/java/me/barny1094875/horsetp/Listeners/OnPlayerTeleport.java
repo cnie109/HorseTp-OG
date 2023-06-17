@@ -56,7 +56,7 @@ public class OnPlayerTeleport implements Listener {
                 ApplicableRegionSet set = query.getApplicableRegions(worldGuardPlayerLocation);
 
                 // check if the horse-can-tp flag is set to DENY
-                if (!set.testState(localPlayer, HorseTp.getHorseTpFlag())) {
+                if (set.testState(localPlayer, HorseTp.getHorseTpFlag())) {
                     // only stop the tp if the player is in a minecart or boat
                     // Otherwise, a protected area could be flooded with boats and minecarts
                     // that can't be destroyed by non-admins

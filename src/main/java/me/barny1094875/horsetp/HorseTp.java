@@ -26,7 +26,7 @@ public final class HorseTp extends JavaPlugin {
         FlagRegistry registry = WorldGuard.getInstance().getFlagRegistry();
         try {
             // create a flag with the name "my-custom-flag", defaulting to true
-            StateFlag flag = new StateFlag("horse-can-tp", true);
+            StateFlag flag = new StateFlag("tp-animals-only", true);
             registry.register(flag);
             HorseTpFlag = flag; // only set our field if there was no error
         } catch (FlagConflictException e) {
