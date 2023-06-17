@@ -40,6 +40,7 @@ public class OnPlayerTeleport implements Listener {
             // TeleportCause.UNKNOWN is a dismount
             if (!event.getCause().equals(TeleportCause.UNKNOWN)) {
                 Player player = event.getPlayer();
+                World playerWorld = player.getWorld();
                 // get the vehicle from the vehicle cache
                 Entity vehicle = HorseTp.getVehicleCahce().get(player);
                 // remove the player and vehicle from the cache
@@ -68,10 +69,10 @@ public class OnPlayerTeleport implements Listener {
                         event.setCancelled(true);
                         // teleport the player back to the original location
                         player.teleport(event.getFrom());
+                        playerWorld.getChunkAt(player.getLocation()).load();
                         return;
                     }
                 }
-                World playerWorld = player.getWorld();
                 // get a list of all the passengers the vehicle had
                 // use try-catch to see if the vehicle still exists
                 // as it may have been removed by another plugin
