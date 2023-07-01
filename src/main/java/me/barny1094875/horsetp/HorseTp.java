@@ -12,7 +12,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public final class HorseTp extends JavaPlugin {
 
@@ -26,13 +25,13 @@ public final class HorseTp extends JavaPlugin {
         FlagRegistry registry = WorldGuard.getInstance().getFlagRegistry();
         try {
             // create a flag with the name "my-custom-flag", defaulting to true
-            StateFlag flag = new StateFlag("tp-animals-only", true);
+            StateFlag flag = new StateFlag("allow-boat-tp", true);
             registry.register(flag);
             HorseTpFlag = flag; // only set our field if there was no error
         } catch (FlagConflictException e) {
             // some other plugin registered a flag by the same name already.
             // you can use the existing flag, but this may cause conflicts - be sure to check type
-            Flag<?> existing = registry.get("tp-animals-only");
+            Flag<?> existing = registry.get("allow-boat-tp");
             if (existing instanceof StateFlag) {
                 HorseTpFlag = (StateFlag) existing;
             } else {
@@ -60,7 +59,7 @@ public final class HorseTp extends JavaPlugin {
         return HorseTpFlag;
     }
 
-    public static HashMap<Player, Entity> getVehicleCahce(){
+    public static HashMap<Player, Entity> getVehicleCache(){
         return vehicleCache;
     }
 

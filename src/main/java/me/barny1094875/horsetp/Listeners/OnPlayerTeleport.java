@@ -1,9 +1,12 @@
 package me.barny1094875.horsetp.Listeners;
 
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import com.sk89q.worldedit.extent.Extent;
 import com.sk89q.worldguard.LocalPlayer;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
+import com.sk89q.worldguard.protection.association.RegionAssociable;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 import me.barny1094875.horsetp.HorseTp;
@@ -13,12 +16,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class OnPlayerTeleport implements Listener {
@@ -31,7 +36,7 @@ public class OnPlayerTeleport implements Listener {
 
             // if the player did not have a vehicle prior to the teleport
             // ignore this handler
-            if(HorseTp.getVehicleCahce().get(event.getPlayer()) == null){
+            if (HorseTp.getVehicleCache().get(event.getPlayer()) == null) {
                 return;
             }
 
@@ -42,11 +47,11 @@ public class OnPlayerTeleport implements Listener {
                 Player player = event.getPlayer();
                 World playerWorld = player.getWorld();
                 // get the vehicle from the vehicle cache
-                Entity vehicle = HorseTp.getVehicleCahce().get(player);
+                Entity vehicle = HorseTp.getVehicleCache().get(player);
                 // remove the player and vehicle from the cache
                 // this is necessary to prevent the WorldGuard teleport
                 // from triggering this event again
-                HorseTp.getVehicleCahce().remove(player);
+                HorseTp.getVehicleCache().remove(player);
 
                 // check if the area that the player teleported to is a banned area
                 LocalPlayer localPlayer = WorldGuardPlugin.inst().wrapPlayer(player);
@@ -64,12 +69,8 @@ public class OnPlayerTeleport implements Listener {
                     if(vehicle instanceof Boat || vehicle instanceof Minecart) {
                         player.sendMessage(Component.text("[HorseTp]")
                                 .color(TextColor.color(0, 255, 0))
-                                .append(Component.text(" You can't teleport there")
+                                .append(Component.text(" You can't teleport boats here")
                                         .color(TextColor.color(255, 0, 0))));
-                        event.setCancelled(true);
-                        // teleport the player back to the original location
-                        player.teleport(event.getFrom());
-                        playerWorld.getChunkAt(player.getLocation()).load();
                         return;
                     }
                 }
@@ -79,7 +80,9 @@ public class OnPlayerTeleport implements Listener {
                 List<Entity> passengerList = null;
                 try {
                     passengerList = vehicle.getPassengers();
-                } catch(Exception e){return;}
+                } catch (Exception e) {
+                    return;
+                }
                 // remove the player from the passenger list
                 passengerList.remove(player);
                 // eject all of the passengers
@@ -97,7 +100,9 @@ public class OnPlayerTeleport implements Listener {
                     // use try-catch to see if the vehicle still exists
                     try {
                         vehicle.teleport(player.getLocation());
-                    } catch(Exception e){return;}
+                    } catch (Exception e) {
+                        return;
+                    }
 
                     finalPassengerList.forEach(entity -> {
                         entity.teleport(player.getLocation());
@@ -121,6 +126,30 @@ public class OnPlayerTeleport implements Listener {
             }
         }, 1);
 
+    }
+
+
+    // this method is used for teleporting players back when the region
+    // that they teleported to is restricted
+    // this is necessary because if someone is laggy, we need to load the
+    // chunk that they are in
+    // This is mostly a problem for 1.8 players
+
+    // It just recursively calls itself, loading the chunk until
+    // the player is teleported back
+    public void loadChunksUntilTeleportComplete(World world, Location teleportFrom, Player player){
+        if(!Arrays.stream(world.getChunkAt(teleportFrom).getEntities()).toList().contains(player)){
+            loadChunksUntilTeleportComplete(world, teleportFrom, player);
+        }
+        else{
+            for(int i = 0; i < (int) Math.ceil(((double) player.getPing()) / 50) + 10; i++){
+                Bukkit.getScheduler().runTaskLater(HorseTp.getPlugin(), () -> {
+                    world.getChunkAt(teleportFrom).load();
+                    player.sendBlockChange(player.getLocation(), world.getBlockData(player.getLocation()));
+                }, i);
+            }
+        }
+        world.getChunkAt(teleportFrom).load();
     }
 
 }
