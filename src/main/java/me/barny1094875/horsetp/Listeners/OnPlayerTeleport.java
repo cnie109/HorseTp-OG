@@ -54,15 +54,14 @@ public class OnPlayerTeleport implements Listener {
                 HorseTp.getVehicleCache().remove(player);
 
                 // check if the area that the player teleported to is a banned area
-                LocalPlayer localPlayer = WorldGuardPlugin.inst().wrapPlayer(player);
                 RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
-                com.sk89q.worldedit.util.Location worldGuardPlayerLocation = localPlayer.getLocation();
+                com.sk89q.worldedit.util.Location worldGuardPlayerLocation = BukkitAdapter.adapt(event.getTo());
 
                 RegionQuery query = container.createQuery();
                 ApplicableRegionSet set = query.getApplicableRegions(worldGuardPlayerLocation);
 
                 // check if the horse-can-tp flag is set to DENY
-                if (set.testState(localPlayer, HorseTp.getHorseTpFlag())) {
+                if (!set.testState(null, HorseTp.getHorseTpFlag())) {
                     // only stop the tp if the player is in a minecart or boat
                     // Otherwise, a protected area could be flooded with boats and minecarts
                     // that can't be destroyed by non-admins
