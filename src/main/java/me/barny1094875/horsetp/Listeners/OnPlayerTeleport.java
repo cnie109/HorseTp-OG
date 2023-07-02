@@ -30,6 +30,7 @@ public class OnPlayerTeleport implements Listener {
 
     @EventHandler
     public void onPlayerTeleport(PlayerTeleportEvent event) {
+
         // run all of this 1 tick after the teleport so that the players location gets updated
         // and the dismount event is guaranteed to have been called
         Bukkit.getScheduler().runTaskLater(HorseTp.getPlugin(), () -> {
@@ -44,6 +45,12 @@ public class OnPlayerTeleport implements Listener {
             // this checks to see if the teleport was a result of a dismount, or a /tp
             // TeleportCause.UNKNOWN is a dismount
             if (!event.getCause().equals(TeleportCause.UNKNOWN)) {
+
+                // I have no idea why this works, but it does
+                // I reset the player's pitch/yaw and then teleport them back
+                event.getPlayer().teleport(new Location(event.getPlayer().getWorld(), event.getPlayer().getLocation().getX(), event.getPlayer().getLocation().getY(), event.getPlayer().getLocation().getZ()));
+                event.getPlayer().teleport(event.getTo());
+
                 Player player = event.getPlayer();
                 World playerWorld = player.getWorld();
                 // get the vehicle from the vehicle cache
