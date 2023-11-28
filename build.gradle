@@ -8,7 +8,7 @@ plugins {
 group = "me.Barny1094875"
 version = "1.4.2"
 
-def apiVersion = "1.18.2" // Declare minecraft server target version.
+def apiVersion = "1.19.4" // Declare minecraft server target version.
 def targetJavaVersion = 17 // Declare java compatibility minimum.
 
 apply plugin: "eclipse" // Enable integration with Eclipse IDE for development.
@@ -46,7 +46,7 @@ repositories {
 dependencies {
 
     implementation 'org.projectlombok:lombok:1.18.22'
-    compileOnly "org.purpurmc.purpur:purpur-api:1.18.2-R0.1-SNAPSHOT" // Declare purpur API version to be packaged.
+    compileOnly "org.purpurmc.purpur:purpur-api:1.19.4-R0.1-SNAPSHOT" // Declare purpur API version to be packaged.
     compileOnly 'com.sk89q.worldguard:worldguard-bukkit:7.0.7'
     implementation 'com.google.code.gson:gson:2.10.1'
 

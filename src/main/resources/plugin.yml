@@ -1,5 +1,5 @@
 name: HorseTp-OG
-version: '1.4.2'
+version: '2.0'
 main: me.barny1094875.horsetp.HorseTp
-api-version: 1.18
+api-version: 1.19
 depend: [WorldGuard]
